@@ -1,0 +1,218 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do App</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg,#6a11cb,#2575fc);
+    }
+
+    .container{
+      width:90%;
+      max-width:450px;
+      background:white;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .container h1{
+      text-align:center;
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    .input-box{
+      display:flex;
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    .input-box input{
+      flex:1;
+      padding:12px;
+      border:2px solid #ddd;
+      border-radius:10px;
+      outline:none;
+      font-size:16px;
+    }
+
+    .input-box button{
+      padding:12px 18px;
+      border:none;
+      background:#2575fc;
+      color:white;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:16px;
+      transition:0.3s;
+    }
+
+    .input-box button:hover{
+      background:#125de0;
+    }
+
+    ul{
+      list-style:none;
+    }
+
+    li{
+      background:#f4f4f4;
+      padding:14px;
+      margin-bottom:12px;
+      border-radius:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      transition:0.3s;
+    }
+
+    li.completed{
+      text-decoration:line-through;
+      opacity:0.6;
+      background:#d4edda;
+    }
+
+    .task-text{
+      flex:1;
+      cursor:pointer;
+    }
+
+    .buttons{
+      display:flex;
+      gap:8px;
+    }
+
+    .complete-btn{
+      background:#28a745;
+    }
+
+    .delete-btn{
+      background:#dc3545;
+    }
+
+    .buttons button{
+      border:none;
+      color:white;
+      padding:8px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .buttons button:hover{
+      transform:scale(1.05);
+    }
+
+    .empty-msg{
+      text-align:center;
+      color:#777;
+      margin-top:10px;
+    }
+
+    @media(max-width:500px){
+      .input-box{
+        flex-direction:column;
+      }
+
+      .input-box button{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>📝 To-Do List App</h1>
+
+    <div class="input-box">
+      <input type="text" id="taskInput" placeholder="Enter your task">
+      <button onclick="addTask()">Add</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <p class="empty-msg" id="emptyMsg">
+      No tasks added yet
+    </p>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+    const emptyMsg = document.getElementById("emptyMsg");
+
+    function addTask() {
+
+      const taskText = taskInput.value.trim();
+
+      if(taskText === ""){
+        alert("Please enter a task");
+        return;
+      }
+
+      const li = document.createElement("li");
+
+      li.innerHTML = `
+        <span class="task-text">${taskText}</span>
+
+        <div class="buttons">
+          <button class="complete-btn">✔</button>
+          <button class="delete-btn">✖</button>
+        </div>
+      `;
+
+      // Complete Task
+      li.querySelector(".complete-btn").addEventListener("click", () => {
+        li.classList.toggle("completed");
+      });
+
+      // Delete Task
+      li.querySelector(".delete-btn").addEventListener("click", () => {
+        li.remove();
+        checkEmpty();
+      });
+
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+
+      checkEmpty();
+    }
+
+    function checkEmpty(){
+      if(taskList.children.length === 0){
+        emptyMsg.style.display = "block";
+      }
+      else{
+        emptyMsg.style.display = "none";
+      }
+    }
+
+    // Add task with Enter key
+    taskInput.addEventListener("keypress", function(e){
+      if(e.key === "Enter"){
+        addTask();
+      }
+    });
+  </script>
+
+</body>
+</html>
